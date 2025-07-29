@@ -25,3 +25,85 @@ flowchart TD
     C --> D[Scapy Sniffer<br>AF_PACKET Layer]
     C --> E[Real-time Alert Console]
     C --> F[ids_alerts.log<br>Ping/SYN logs]
+
+
+🧪 Tech Stack
+Language: Python 3
+
+Libraries: scapy, datetime, os
+
+Tools Used: tshark, nmap, ping, PowerShell, hping3
+
+Hardware: Raspberry Pi 4
+
+Interface: tailscale0 (VPN-based interface)
+
+
+🚀 Getting Started
+🧰 Prerequisites
+Raspberry Pi with Python 3 installed
+
+Install scapy:
+
+bash
+Copy
+Edit
+pip install scapy
+Tailscale VPN (or another network interface)
+
+tshark (optional, for validation)
+
+🔧 Run the IDS
+bash
+Copy
+Edit
+sudo python3 pi_ids.py
+You’ll start seeing real-time alerts like:
+
+csharp
+Copy
+Edit
+[2025-04-28 12:28:01] Ping detected from 100.114.6.22
+[2025-04-28 12:28:06] SYN packet from 192.168.0.5:49672 to 192.168.0.1:22
+Log file: ~/ids_alerts.log
+
+🧠 Key Concepts Learned
+Raw socket programming & AF_PACKET access via Scapy
+
+Packet structure analysis (ICMP, TCP)
+
+Filtering with Berkeley Packet Filter (BPF) syntax
+
+Real-time detection loop with flushable log writes
+
+Tshark capture validation and Nmap simulation testing
+
+🧱 Use Cases
+🧪 Student SOC Labs
+
+🏠 Home Network Monitoring
+
+📚 Classroom Demonstrations
+
+🧱 Lightweight edge security deployments
+
+🧬 Example Detection Snippet
+python
+Copy
+Edit
+if pkt.haslayer(ICMP):
+    if pkt[ICMP].type == 8:
+        print(f"Ping detected from {pkt[IP].src}")
+
+elif pkt.haslayer(TCP):
+    if pkt[TCP].flags & 0x02:
+        print(f"SYN packet from {pkt[IP].src} to {pkt[IP].dst}")
+🚧 Future Work
+✅ MVP complete
+
+☁️ AWS CloudWatch log streaming (planned)
+
+📬 Email/Slack integration for critical alerts
+
+🧠 ML-based anomaly detection (long-term roadmap)
+
