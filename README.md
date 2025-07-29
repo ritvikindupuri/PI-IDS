@@ -16,34 +16,12 @@ As part of my work in CNIT 17600 (Information Technology Architectures), I devel
 
 ---
 
-## 📊 Architecture Diagram
+## 📊 Architecture Diagram (Rendered with Mermaid)
 
-```text
-                        +------------------------+
-                        |    Attacker (Windows)  |
-                        | ping, nmap, hping3     |
-                        +-----------+------------+
-                                    |
-                                    v
-                          +---------+----------+
-                          |   Tailscale VPN     |
-                          | (secure interface)  |
-                          +---------+----------+
-                                    |
-                                    v
-                +-------------------+---------------------+
-                |              Raspberry Pi IDS           |
-                |------------------------------------------|
-                | - Python + Scapy                        |
-                | - Custom packet sniffer (AF_PACKET)     |
-                | - Detects ICMP Echo & TCP SYN           |
-                | - Alerts in terminal & logs to file     |
-                +-------------------+---------------------+
-                                    |
-                                    v
-                          +---------+----------+
-                          |  ids_alerts.log    |
-                          | Real-time logs:    |
-                          | - Ping sweeps      |
-                          | - SYN scans        |
-                          +--------------------+
+```mermaid
+flowchart TD
+    A[Attacker<br>nmap/ping/hping3] --> B[Tailscale VPN]
+    B --> C[Raspberry Pi IDS]
+    C --> D[Scapy Sniffer<br>AF_PACKET Layer]
+    C --> E[Real-time Alert Console]
+    C --> F[ids_alerts.log<br>Ping/SYN logs]
