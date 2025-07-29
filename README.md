@@ -1,7 +1,6 @@
-
 # 🍓 Raspberry Pi Intrusion Detection System (IDS)
 
-A lightweight Python-based IDS built for edge networks using a Raspberry Pi, designed to detect **early-stage reconnaissance traffic** such as ICMP ping sweeps and TCP SYN scans. Built and tested as part of Purdue's CNIT 17600 course.
+As part of my work in CNIT 17600 (Information Technology Architectures), I developed a fully functional IDS on a Raspberry Pi to detect early-stage reconnaissance traffic—such as ICMP pings and TCP SYN scans—commonly used by attackers to map networks.
 
 ---
 
@@ -48,17 +47,3 @@ A lightweight Python-based IDS built for edge networks using a Raspberry Pi, des
                           | - Ping sweeps      |
                           | - SYN scans        |
                           +--------------------+
-
-
-
-
-🧪 Tech Stack
-Language: Python 3
-
-Libraries: scapy, datetime, os
-
-Tools Used: tshark, nmap, ping, PowerShell, hping3
-
-Hardware: Raspberry Pi 4
-
-Interface: tailscale0 (VPN)
