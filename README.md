@@ -32,7 +32,10 @@ flowchart TD
 ## 🧪 Tech Stack
 
 - **Language**: Python 3
-- **Libraries**: `scapy`, `datetime`, `os`
+- **Libraries**:
+  - [`scapy`](https://scapy.net/) — Packet sniffing and protocol inspection
+  - `datetime` — For real-time timestamped alerting
+  - `os` — To manage file paths for local logging
 - **Tools Used**: `tshark`, `nmap`, `ping`, `PowerShell`, `hping3`
 - **Hardware**: Raspberry Pi 4
 - **Interface**: `tailscale0` (VPN-based interface)
