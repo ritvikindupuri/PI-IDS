@@ -20,35 +20,35 @@ A lightweight Python-based IDS built for edge networks using a Raspberry Pi, des
 ## 📊 Architecture Diagram
 
 ```text
-+----------------------------+
-|     Windows Attacker      |
-|---------------------------|
-| ping / nmap / hping3      |
-+-------------+-------------+
-              |
-              v
-+----------------------------+
-|      Tailscale VPN        |
-|  (connects devices in lab)|
-+-------------+-------------+
-              |
-              v
-+----------------------------+
-|     Raspberry Pi IDS      |
-|---------------------------|
-| - Scapy sniffer           |
-| - Custom packet handler   |
-| - Logs alerts to file     |
-| - Displays live alerts    |
-+-------------+-------------+
-              |
-              v
-+----------------------------+
-|     ids_alerts.log        |
-| - Saved alerts:           |
-|   - Ping sweeps           |
-|   - SYN scans             |
-+----------------------------+
+                        +------------------------+
+                        |    Attacker (Windows)  |
+                        | ping, nmap, hping3     |
+                        +-----------+------------+
+                                    |
+                                    v
+                          +---------+----------+
+                          |   Tailscale VPN     |
+                          | (secure interface)  |
+                          +---------+----------+
+                                    |
+                                    v
+                +-------------------+---------------------+
+                |              Raspberry Pi IDS           |
+                |------------------------------------------|
+                | - Python + Scapy                        |
+                | - Custom packet sniffer (AF_PACKET)     |
+                | - Detects ICMP Echo & TCP SYN           |
+                | - Alerts in terminal & logs to file     |
+                +-------------------+---------------------+
+                                    |
+                                    v
+                          +---------+----------+
+                          |  ids_alerts.log    |
+                          | Real-time logs:    |
+                          | - Ping sweeps      |
+                          | - SYN scans        |
+                          +--------------------+
+
 
 
 
