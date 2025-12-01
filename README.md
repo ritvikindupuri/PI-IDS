@@ -4,20 +4,19 @@ As part of my work in CNIT 17600 (Information Technology Architectures), I devel
 
 ---
 
-## 🔍 What It Does
+##  What It Does
 
 | Feature                            | Description                                                                 |
 |------------------------------------|-----------------------------------------------------------------------------|
-| 📡 Packet Sniffing                | Uses Scapy to capture network packets in real time                         |
-| 🛡️ Threat Detection               | Detects ICMP Echo Requests and TCP SYN packets (reconnaissance attempts)   |
-| 📝 Logging                        | Alerts are written to both the terminal and a local log file               |
-| ⚙️ Protocol Support              | Supports ICMP, TCP (SYN flags)                                             |
-| 🧪 Validation                     | Tested using tshark, nmap, ping, and hping3                                |
+|  Packet Sniffing                | Uses Scapy to capture network packets in real time                         |
+|  Threat Detection               | Detects ICMP Echo Requests and TCP SYN packets (reconnaissance attempts)   |
+|  Logging                        | Alerts are written to both the terminal and a local log file               |
+|  Protocol Support              | Supports ICMP, TCP (SYN flags)                                             |
+|  Validation                     | Tested using tshark, nmap, ping, and hping3                                |
 
 ---
 
-## 📊 Architecture Diagram (Rendered with Mermaid)
-
+##  Architecture Diagram 
 ```mermaid
 flowchart TD
     A[Attacker<br>nmap/ping/hping3] --> B[Tailscale VPN]
@@ -29,7 +28,7 @@ flowchart TD
 
 ---
 
-## 🧪 Tech Stack
+##  Tech Stack
 
 - **Language**: Python 3
 - **Libraries**:
@@ -42,15 +41,15 @@ flowchart TD
 
 ---
 
-## 💡 Threat Intelligence Motivation
+##  Threat Intelligence Motivation
 
-> 📈 Inspired by IBM’s X-Force Threat Intelligence Index (2022), which found that **40% of cyberattacks begin with reconnaissance**. This project focuses on **detecting before exploiting**.
+>  Inspired by IBM’s X-Force Threat Intelligence Index (2022), which found that **40% of cyberattacks begin with reconnaissance**. This project focuses on **detecting before exploiting**.
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
-### 🧰 Prerequisites
+###  Prerequisites
 
 - Raspberry Pi with Python 3 installed
 - Install `scapy`:
@@ -60,7 +59,7 @@ flowchart TD
 - Tailscale VPN (or another network interface)
 - `tshark` (optional, for validation)
 
-### 🔧 Run the IDS
+###  Run the IDS
 
 ```bash
 sudo python3 pi_ids.py
@@ -77,7 +76,7 @@ Log file: `~/ids_alerts.log`
 
 ---
 
-## 🧠 Key Concepts Learned
+##  Key Concepts Learned
 
 - Raw socket programming & AF_PACKET access via Scapy
 - Packet structure analysis (ICMP, TCP)
