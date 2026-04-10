@@ -2,11 +2,11 @@
 
 ## Project Description
 
-My name is Ritvik Indupuri, a freshman studying Computer Information Technology at Purdue University, and this is my Raspberry Pi project for CNIT 176. I have a keen interest in cloud security and aspire to work as a Cloud Security Engineer in the near future.
+This project provides a lightweight, real-time Intrusion Detection System (IDS) designed to operate at the network's edge.
 
-The business case for this project is built on a striking statistic: **40% of cyberattacks begin with reconnaissance**—silent scans that often go completely unnoticed. While large enterprises have the infrastructure to detect these early stages, most networks at home, on campus, or in small offices lack visibility into this phase. According to IBM's X-Force Threat Intelligence Index, nearly four in ten attacks start this way, long before malware or exploits are used.
+Research indicates that 40% of cyberattacks begin with reconnaissance—silent scans that often go completely unnoticed. While large enterprises have the infrastructure to detect these early stages, most networks at home or in small offices lack visibility into this phase. According to IBM's X-Force Threat Intelligence Index, nearly four in ten attacks start this way, long before malware or exploits are used.
 
-To address this gap, I developed a lightweight, real-time Intrusion Detection System (IDS) using a Raspberry Pi, Python, and the Scapy library. Think of this IDS as a motion detector at your network's front door. Sitting at the edge of the network before any firewall or endpoint, it monitors inbound traffic and focuses on two key reconnaissance patterns: **ICMP Echo Requests (pings)** and **TCP SYN packets (stealth port scans)**. Designed for low-budget setups or environments lacking enterprise-grade tools, this completely offline system spots attackers early and instantly logs their activity.
+To address this gap, this IDS was developed using a Raspberry Pi, Python, and the Scapy library. Operating as a motion detector at the network's front door, it sits before any firewall or endpoint to monitor inbound traffic. It focuses on detecting two key reconnaissance patterns: **ICMP Echo Requests (pings)** and **TCP SYN packets (stealth port scans)**. Designed for low-budget setups or environments lacking enterprise-grade tools, this completely offline system spots attackers early and instantly logs their activity.
 
 ## Key Features
 
@@ -27,8 +27,8 @@ To address this gap, I developed a lightweight, real-time Intrusion Detection Sy
 flowchart TD
     A[Attacker Network/Laptop] -->|Inbound Packets| B(Wireless Adapter / Tailscale VPN)
     B -->|Peripheral I/O| C{AF_PACKET Socket}
-    C -->|Raw Ethernet Frames| D[Scapy `sniff` Function]
-    D -->|Interrupt-Driven I/O| E{`detect_packet()`}
+    C -->|Raw Ethernet Frames| D[Scapy sniff Function]
+    D -->|Interrupt-Driven I/O| E{detect_packet Function}
 
     E -->|Yellow Path: ICMP Echo Request| F[Log Ping Source & Dest]
     E -->|TCP SYN Packet| G[Extract Targeted Ports & IPs]
@@ -37,7 +37,7 @@ flowchart TD
     G --> H(Write to File Descriptor)
 
     H -->|System Call| I[(ids_alerts.log)]
-    I -->|`tail -f`| J[Live Terminal Output]
+    I -->|tail -f| J[Live Terminal Output]
 ```
 
 ### Flow-by-Flow Diagram Explanation
@@ -58,6 +58,26 @@ flowchart TD
 * **Networking:** Tailscale (Mesh VPN), `hostapd` (Access Point mode with `nl80211` driver)
 * **OS / Environment:** Linux (Raspberry Pi OS)
 * **Testing Tools:** Nmap, T-Shark, Ping
+
+## Live Demonstration
+
+### Attacker Perspective: Launching the Scan
+
+<div align="center">
+  <h3>Figure 1: Attacker PowerShell Terminal Output</h3>
+  <img src="https://i.imgur.com/n16WkA5.png" alt="PowerShell terminal output launching the attack">
+</div>
+
+**Explanation:** In this screenshot, the attacker (my Windows laptop) is simulating a reconnaissance phase. First, the `ping` command is used to send ICMP echo requests directly to the Raspberry Pi to check if the host is online. Next, a stealth TCP SYN scan is launched using Nmap (`nmap -Pn -sS -p 22,80,443`) to probe for open ports specifically targeting SSH (22), HTTP (80), and HTTPS (443).
+
+### Defender Perspective: The IDS at Work
+
+<div align="center">
+  <h3>Figure 2: Pi-Terminal IDS Output</h3>
+  <img src="https://i.imgur.com/anqb8hm.png" alt="PI-terminal screen image showing IDS output">
+</div>
+
+**Explanation:** On the Raspberry Pi, two terminals are running side-by-side. The terminal on the right runs the Python detection script via `sudo`, capturing and parsing the incoming packets in real time. The terminal on the left uses the `tail -f ~/ids_alerts.log` command to instantly print the appended logs. As soon as the Pi receives the ping packets and the Nmap SYN packets, the alerts populate on both screens, detailing the attack type, the source IP, the targeted ports, and exactly when the scan occurred. This confirms the system successfully caught the reconnaissance traffic at the network's edge with no delays.
 
 ## Detailed Setup Steps
 
@@ -108,25 +128,6 @@ Follow these steps to deploy the IDS on your own Raspberry Pi:
 
 *(Note: If configuring the Pi as an Access Point, ensure `hostapd.conf` is properly set up and the `nl80211` Linux driver is added, otherwise the service will crash.)*
 
-## Live Demonstration
+## Future Enhancements
 
-### Attacker Perspective: Launching the Scan
-
-<div align="center">
-  <h3>Figure 1: Attacker PowerShell Terminal Output</h3>
-  <img src="https://i.imgur.com/n16WkA5.png" alt="PowerShell terminal output launching the attack">
-</div>
-
-**Explanation:** In this screenshot, the attacker (my Windows laptop) is simulating a reconnaissance phase. First, the `ping` command is used to send ICMP echo requests directly to the Raspberry Pi to check if the host is online. Next, a stealth TCP SYN scan is launched using Nmap (`nmap -Pn -sS -p 22,80,443`) to probe for open ports specifically targeting SSH (22), HTTP (80), and HTTPS (443).
-
-### Defender Perspective: The IDS at Work
-
-<div align="center">
-  <h3>Figure 2: Pi-Terminal IDS Output</h3>
-  <img src="https://i.imgur.com/anqb8hm.png" alt="PI-terminal screen image showing IDS output">
-</div>
-
-**Explanation:** On the Raspberry Pi, two terminals are running side-by-side. The terminal on the right runs the Python detection script via `sudo`, capturing and parsing the incoming packets in real time. The terminal on the left uses the `tail -f ~/ids_alerts.log` command to instantly print the appended logs. As soon as the Pi receives the ping packets and the Nmap SYN packets, the alerts populate on both screens, detailing the attack type, the source IP, the targeted ports, and exactly when the scan occurred. This confirms the system successfully caught the reconnaissance traffic at the network's edge with no delays.
-
----
-*Future enhancements for this project include creating a systemd service to run the IDS on boot without manual `sudo` execution, expanding detection to UDP and HTTP payloads, rotating logs, and integrating with AWS CloudWatch (after resolving malformed IAM signature exceptions).*
+Future enhancements for this project include creating a systemd service to run the IDS on boot without manual `sudo` execution, expanding detection to UDP and HTTP payloads, rotating logs, and integrating with AWS CloudWatch (after resolving malformed IAM signature exceptions).
